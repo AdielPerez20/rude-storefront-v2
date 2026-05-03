@@ -3,14 +3,16 @@ import {Link} from 'react-router';
 import {cn} from '~/lib/cn';
 
 /**
- * RUDE hero with two distinct treatments:
+ * RUDE hero — image-first. The dailyrude.com landing imagery already
+ * carries the wordmark, the subtitle, and the editorial mood, so the
+ * only chrome the hero adds on top is two CTAs anchored to the bottom
+ * of the image. No tagline, no claims strip — those live in the
+ * marquee section that immediately follows.
  *
- * - **Mobile**: image renders at its natural aspect ratio (no crop), then
- *   tagline + CTAs + brand-claims sit in a dedicated dark band beneath it.
- *   Nothing overlays the image, so the baked-in "RUDE" wordmark is fully
- *   visible.
- * - **Desktop (md+)**: full-bleed cover image with overlay copy on the
- *   bottom band, anchored to the empty grass area of the wide asset.
+ * - **Mobile**: the portrait asset renders at its natural aspect ratio
+ *   (no crop, fully visible). CTAs sit on the bottom edge of the image.
+ * - **Desktop**: full-bleed cover; CTAs sit on the empty grass band at
+ *   the bottom of the wide asset.
  *
  * @param {{
  *   t: ReturnType<import('~/lib/i18n').useTranslation>,
@@ -18,7 +20,6 @@ import {cn} from '~/lib/cn';
  * }} props
  */
 export function Hero({t, locale}) {
-  const isHe = locale === 'he';
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
@@ -28,10 +29,10 @@ export function Hero({t, locale}) {
 
   return (
     <section
-      className="relative isolate flex flex-col bg-rude-ink text-rude-cream md:min-h-[92svh] md:justify-end md:overflow-hidden"
+      className="relative isolate flex flex-col overflow-hidden bg-rude-ink text-rude-cream md:min-h-[92svh] md:justify-end"
       aria-label="hero"
     >
-      {/* ── Mobile: full-bleed image at natural ratio ───────────────────── */}
+      {/* ── Mobile: full-bleed image at natural ratio ─────────────────── */}
       <div className="relative md:hidden">
         <img
           src="/images/landing-page-mobile.jpg"
@@ -43,9 +44,46 @@ export function Hero({t, locale}) {
           style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
           fetchPriority="high"
         />
+
+        {/* Bottom soft wash for legibility under the CTAs only */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-44"
+          style={{
+            background:
+              'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.7) 100%)',
+          }}
+          aria-hidden
+        />
+
+        {/* CTAs anchored to the bottom of the mobile image */}
+        <div
+          className={cn(
+            'absolute inset-x-0 bottom-0 z-10 px-5 pb-7 transition-all duration-700 sm:px-8',
+            introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
+          )}
+          style={{transitionDelay: '320ms'}}
+        >
+          <div className="flex flex-col items-stretch gap-3">
+            <Link
+              to="/collections/all"
+              prefetch="intent"
+              className="btn-rude-neon group justify-center"
+            >
+              {t.hero.ctaPrimary}
+              <ArrowRight className="ms-1 transition-transform duration-500 group-hover:translate-x-1 rtl:rotate-180" />
+            </Link>
+            <Link
+              to="/collections"
+              prefetch="intent"
+              className="btn-rude justify-center border border-rude-cream/40 bg-rude-cream/10 text-rude-cream backdrop-blur-md hover:bg-rude-cream hover:text-rude-ink"
+            >
+              {t.hero.ctaSecondary}
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* ── Desktop: full-bleed cover image + bottom legibility wash ──── */}
+      {/* ── Desktop: full-bleed cover image + bottom legibility wash ─── */}
       <div className="pointer-events-none absolute inset-0 -z-10 hidden md:block">
         <img
           src="/images/landing-page-wide.jpg"
@@ -58,31 +96,20 @@ export function Hero({t, locale}) {
           fetchPriority="high"
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-[55%]"
+          className="absolute inset-x-0 bottom-0 h-[40%]"
           style={{
             background:
-              'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.25) 45%, rgba(10,10,10,0.78) 100%)',
+              'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.55) 100%)',
           }}
           aria-hidden
         />
       </div>
 
-      {/* ── Content band (mobile = below image, desktop = overlay) ─────── */}
-      <div className="container-rude relative z-10 pb-10 pt-10 md:pb-28 md:pt-32">
-        <p
-          className={cn(
-            'max-w-xl text-balance text-body text-rude-cream/90 transition-all duration-700 md:text-body-lg md:text-rude-cream/95',
-            isHe && 'font-hebrew',
-            introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
-          )}
-          style={{transitionDelay: '180ms'}}
-        >
-          {t.hero.tagline}
-        </p>
-
+      {/* Desktop CTA band at the bottom of the hero */}
+      <div className="container-rude relative z-10 hidden pb-12 md:block">
         <div
           className={cn(
-            'mt-6 flex flex-col items-stretch gap-3 transition-all duration-700 sm:flex-row sm:items-center sm:gap-4 md:mt-7',
+            'flex flex-row items-center gap-4 transition-all duration-700',
             introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
           )}
           style={{transitionDelay: '320ms'}}
@@ -104,50 +131,7 @@ export function Hero({t, locale}) {
           </Link>
         </div>
       </div>
-
-      {/* ── Brand-claims strip ───────────────────────────────────────────── */}
-      <div
-        className={cn(
-          'relative z-10 border-t border-rude-cream/15 bg-rude-ink/50 backdrop-blur-md transition-all duration-700',
-          introDone ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
-        )}
-        style={{transitionDelay: '480ms'}}
-      >
-        <div className="container-rude flex flex-wrap items-center justify-between gap-3 py-3 text-rude-cream/85 md:py-4">
-          <BrandClaim>
-            {locale === 'he' ? 'ללא סוכר' : 'No sugar'}
-          </BrandClaim>
-          <span
-            className="hidden h-3 w-px bg-rude-cream/20 sm:block"
-            aria-hidden
-          />
-          <BrandClaim className="hidden sm:inline-flex">
-            {locale === 'he' ? 'רכיבים טבעיים' : 'Natural ingredients'}
-          </BrandClaim>
-          <span
-            className="hidden h-3 w-px bg-rude-cream/20 sm:block"
-            aria-hidden
-          />
-          <BrandClaim>
-            {locale === 'he' ? 'תוצרת ישראל' : 'Made in Israel'}
-          </BrandClaim>
-        </div>
-      </div>
     </section>
-  );
-}
-
-function BrandClaim({children, className}) {
-  return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.18em] md:text-micro md:tracking-[0.22em]',
-        className,
-      )}
-    >
-      <span className="size-1.5 rounded-full bg-rude-pink" aria-hidden />
-      {children}
-    </span>
   );
 }
 
