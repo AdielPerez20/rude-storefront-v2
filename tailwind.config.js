@@ -29,42 +29,42 @@ export default {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
-        // Editorial, dramatic scale
+        // Tightened editorial scale — large but no longer billboard-sized.
         'display-3xl': [
-          'clamp(4rem, 14vw, 14rem)',
-          { lineHeight: '0.85', letterSpacing: '-0.04em' },
-        ],
-        'display-2xl': [
-          'clamp(3rem, 10vw, 10rem)',
-          { lineHeight: '0.88', letterSpacing: '-0.035em' },
-        ],
-        'display-xl': [
-          'clamp(2.5rem, 7vw, 7rem)',
+          'clamp(2.75rem, 8vw, 6.5rem)',
           { lineHeight: '0.92', letterSpacing: '-0.03em' },
         ],
-        'display-lg': [
-          'clamp(2rem, 5vw, 4.5rem)',
+        'display-2xl': [
+          'clamp(2.25rem, 6vw, 5rem)',
           { lineHeight: '0.95', letterSpacing: '-0.025em' },
         ],
+        'display-xl': [
+          'clamp(1.75rem, 4.25vw, 3.5rem)',
+          { lineHeight: '1', letterSpacing: '-0.02em' },
+        ],
+        'display-lg': [
+          'clamp(1.5rem, 3.25vw, 2.5rem)',
+          { lineHeight: '1.05', letterSpacing: '-0.018em' },
+        ],
         heading: [
-          'clamp(1.75rem, 3.5vw, 3rem)',
-          { lineHeight: '1.05', letterSpacing: '-0.02em' },
+          'clamp(1.4rem, 2.4vw, 2rem)',
+          { lineHeight: '1.1', letterSpacing: '-0.015em' },
         ],
         subheading: [
-          'clamp(1.25rem, 2vw, 1.625rem)',
-          { lineHeight: '1.2', letterSpacing: '-0.01em' },
+          'clamp(1.125rem, 1.6vw, 1.375rem)',
+          { lineHeight: '1.25', letterSpacing: '-0.01em' },
         ],
-        'body-lg': ['1.125rem', { lineHeight: '1.6' }],
-        body: ['1rem', { lineHeight: '1.65' }],
-        caption: ['0.875rem', { lineHeight: '1.5' }],
+        'body-lg': ['1.0625rem', { lineHeight: '1.6' }],
+        body: ['0.9375rem', { lineHeight: '1.6' }],
+        caption: ['0.8125rem', { lineHeight: '1.5' }],
         micro: [
-          '0.75rem',
+          '0.6875rem',
           { lineHeight: '1.4', letterSpacing: '0.12em' },
         ],
       },
       spacing: {
-        section: 'clamp(5rem, 12vh, 10rem)',
-        'section-sm': 'clamp(2.5rem, 6vh, 5rem)',
+        section: 'clamp(3rem, 7vh, 5.5rem)',
+        'section-sm': 'clamp(2rem, 4vh, 3rem)',
       },
       borderRadius: {
         rude: '2px',
