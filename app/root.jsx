@@ -14,6 +14,7 @@ import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from './components/PageLayout';
+import {getLocaleFromRequest} from '~/lib/i18n';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -69,10 +70,12 @@ export async function loader(args) {
   const criticalData = await loadCriticalData(args);
 
   const {storefront, env} = args.context;
+  const i18n = getLocaleFromRequest(args.request);
 
   return {
     ...deferredData,
     ...criticalData,
+    i18n,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     shop: getShopAnalytics({
       storefront,
@@ -144,12 +147,15 @@ function loadDeferredData({context}) {
  */
 export function Layout({children}) {
   const nonce = useNonce();
+  const data = useRouteLoaderData('root');
+  const i18n = data?.i18n ?? {locale: 'he', direction: 'rtl', isRTL: true};
 
   return (
-    <html lang="en">
+    <html lang={i18n.locale} dir={i18n.direction}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta name="theme-color" content="#0A0A0A" />
         <link rel="stylesheet" href={resetStyles}></link>
         <link rel="stylesheet" href={appStyles}></link>
         <Meta />
@@ -178,7 +184,7 @@ export default function App() {
       shop={data.shop}
       consent={data.consent}
     >
-      <PageLayout {...data}>
+      <PageLayout {...data} locale={data.i18n?.locale}>
         <Outlet />
       </PageLayout>
     </Analytics.Provider>
@@ -198,15 +204,27 @@ export function ErrorBoundary() {
   }
 
   return (
-    <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
-    </div>
+    <section className="flex min-h-[100svh] items-center justify-center bg-rude-cream px-6 py-24">
+      <div className="container-rude max-w-2xl text-center">
+        <span className="font-mono text-micro uppercase tracking-[0.22em] text-rude-pink">
+          Error · {errorStatus}
+        </span>
+        <h1 className="display-text mt-6 text-display-2xl text-rude-ink">
+          Something went rude.
+        </h1>
+        {errorMessage ? (
+          <pre className="mt-8 overflow-x-auto rounded-rude border border-rude-ink/10 bg-rude-ink/5 p-4 text-start font-mono text-caption text-rude-ink/70">
+            {errorMessage}
+          </pre>
+        ) : null}
+        <a
+          href="/"
+          className="btn-rude-primary mt-10 inline-flex"
+        >
+          Take me home
+        </a>
+      </div>
+    </section>
   );
 }
 
