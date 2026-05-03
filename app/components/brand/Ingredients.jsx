@@ -62,10 +62,10 @@ export function Ingredients({t, locale}) {
         <Reveal className="grid gap-6 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-7">
             <span className="label-eyebrow !text-rude-pink">
-              {t.sections.ingredients.eyebrow}
+              {t.ingredients.eyebrow}
             </span>
             <h2 className="display-text mt-4 text-display-xl text-balance">
-              {t.sections.ingredients.title}
+              {t.ingredients.title}
             </h2>
           </div>
           <div className="md:col-span-5 md:self-end">
@@ -75,7 +75,7 @@ export function Ingredients({t, locale}) {
                 isHe && 'font-hebrew',
               )}
             >
-              {t.sections.ingredients.sub}
+              {t.ingredients.sub}
             </p>
           </div>
         </Reveal>

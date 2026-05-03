@@ -1,12 +1,19 @@
 import {Await, useLoaderData, useRouteLoaderData} from 'react-router';
 import {Suspense} from 'react';
+
 import {Hero} from '~/components/brand/Hero';
 import {MarqueeStrip} from '~/components/brand/MarqueeStrip';
-import {Manifesto} from '~/components/brand/Manifesto';
-import {ProductShowcase} from '~/components/brand/ProductShowcase';
+import {ProductsLineup} from '~/components/brand/ProductsLineup';
+import {FeaturedSpotlight} from '~/components/brand/FeaturedSpotlight';
+import {Benefits} from '~/components/brand/Benefits';
+import {HowToUse} from '~/components/brand/HowToUse';
+import {CreatineBenefits} from '~/components/brand/CreatineBenefits';
 import {Ingredients} from '~/components/brand/Ingredients';
-import {Lifestyle} from '~/components/brand/Lifestyle';
+import {EditorialBand} from '~/components/brand/EditorialBand';
+import {Subscription} from '~/components/brand/Subscription';
+import {Bundle} from '~/components/brand/Bundle';
 import {Reviews} from '~/components/brand/Reviews';
+import {FAQ} from '~/components/brand/FAQ';
 import {Newsletter} from '~/components/brand/Newsletter';
 import {FinalCTA} from '~/components/brand/FinalCTA';
 import {useTranslation} from '~/lib/i18n';
@@ -31,7 +38,6 @@ export async function loader(args) {
 }
 
 async function loadCriticalData({context}) {
-  // Featured collection lookup is fast and cached.
   const [{collections}] = await Promise.all([
     context.storefront.query(FEATURED_COLLECTION_QUERY),
   ]);
@@ -60,22 +66,74 @@ export default function Homepage() {
 
   return (
     <>
+      {/* 01 — Cinematic hero */}
       <Hero t={t} locale={locale} />
+
+      {/* 02 — Brand-claims marquee band */}
       <MarqueeStrip items={t.marquee} />
-      <Manifesto t={t} locale={locale} />
-      <ProductShowcase t={t} locale={locale} />
+
+      {/* 03 — Products line-up (Electrolytes / Creatine / Bundles) */}
+      <ProductsLineup t={t} locale={locale} />
+
+      {/* 04 — Electrolytes spotlight */}
+      <FeaturedSpotlight
+        t={t}
+        locale={locale}
+        data="featuredElectrolytes"
+        image="/images/rude-grandpa-kick-beach.jpg"
+        imageAlt="RUDE Electrolytes — campaign"
+        bg="bg-rude-bone"
+        accentColor="text-rude-sky"
+      />
+
+      {/* 05 — Creatine intro spotlight (mirrored) */}
+      <FeaturedSpotlight
+        t={t}
+        locale={locale}
+        data="featuredCreatine"
+        image="/images/rude-creatine-tennis.jpg"
+        imageAlt="RUDE Creatine — campaign"
+        reverse
+        bg="bg-rude-bone"
+        accentColor="text-rude-pink"
+      />
+
+      {/* 06 — Why RUDE? benefits */}
+      <Benefits t={t} locale={locale} />
+
+      {/* 07 — How to use ritual */}
+      <HowToUse t={t} locale={locale} />
+
+      {/* 08 — Creatine deep-dive benefits */}
+      <CreatineBenefits t={t} locale={locale} />
+
+      {/* 09 — Ingredients grid */}
       <Ingredients t={t} locale={locale} />
-      <Lifestyle t={t} locale={locale} />
+
+      {/* 10 — Full-bleed campaign band */}
+      <EditorialBand />
+
+      {/* 11 — Subscription pitch */}
+      <Subscription t={t} locale={locale} />
+
+      {/* 12 — Bundle pricing */}
+      <Bundle t={t} locale={locale} />
+
+      {/* 13 — Reviews */}
       <Reviews t={t} locale={locale} />
+
+      {/* 14 — FAQ accordion */}
+      <FAQ t={t} locale={locale} />
+
+      {/* 15 — Email capture */}
       <Newsletter t={t} locale={locale} />
+
+      {/* 16 — Final CTA */}
       <FinalCTA t={t} locale={locale} />
 
-      {/* Recommended products placeholder — will replace ProductShowcase mock with real Shopify data once linked */}
+      {/* Hydration boundary for live recommended products (used later) */}
       <Suspense fallback={null}>
-        <Await resolve={data.recommendedProducts}>
-          {/* Intentionally rendered as no-op for the visual layer; data primed for hydration of Showcase variant later. */}
-          {() => null}
-        </Await>
+        <Await resolve={data.recommendedProducts}>{() => null}</Await>
       </Suspense>
     </>
   );

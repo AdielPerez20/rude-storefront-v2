@@ -45,10 +45,10 @@ export function Reviews({t, locale}) {
       <div className="container-rude">
         <Reveal>
           <span className="label-eyebrow !text-rude-ink/70">
-            {t.sections.reviews.eyebrow}
+            {t.reviews.eyebrow}
           </span>
           <h2 className="display-text mt-4 max-w-3xl text-display-xl text-balance">
-            {t.sections.reviews.title}
+            {t.reviews.title}
           </h2>
         </Reveal>
 

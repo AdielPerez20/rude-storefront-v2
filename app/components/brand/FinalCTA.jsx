@@ -9,42 +9,45 @@ import {cn} from '~/lib/cn';
  * }} props
  */
 export function FinalCTA({t, locale}) {
+  const isHe = locale === 'he';
   return (
-    <section className="relative isolate overflow-hidden bg-rude-ink py-section text-rude-cream">
-      <div className="absolute inset-0 -z-10">
-        <img
-          src="/images/rude-hero-mobile.jpg"
-          alt=""
-          className="size-full object-cover opacity-30"
-          loading="lazy"
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, rgba(255,30,122,0.4) 0%, rgba(10,10,10,0.95) 65%)',
-          }}
-          aria-hidden
-        />
-      </div>
+    <section className="relative isolate flex min-h-[60vh] items-center overflow-hidden bg-rude-ink py-section text-rude-cream">
+      <img
+        src="/images/rude-tennis-raining.jpg"
+        alt=""
+        className="absolute inset-0 -z-10 size-full object-cover object-top opacity-50"
+        loading="lazy"
+      />
+      <div
+        className="absolute inset-0 -z-10"
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.55) 100%)',
+        }}
+        aria-hidden
+      />
 
-      <div className="container-rude flex flex-col items-center gap-8 text-center">
+      <div className="container-rude w-full text-center">
         <Reveal>
-          <span className="label-eyebrow !text-rude-neon">
-            {locale === 'he' ? 'מוכנים?' : 'Ready?'}
-          </span>
-        </Reveal>
-        <Reveal delay={1}>
-          <h2 className={cn('display-text text-display-3xl text-balance leading-none')}>
-            {t.sections.finalCta.title}
+          <h2
+            className={cn(
+              'display-text text-display-2xl text-rude-cream',
+              isHe && 'font-hebrew',
+            )}
+          >
+            {t.finalCta.title}
           </h2>
-          <p className="mt-4 font-display text-display-lg italic text-rude-pink">
-            {t.sections.finalCta.subtitle}
+          <p className="font-display text-display-3xl italic text-rude-pink">
+            {t.finalCta.titleAccent}
           </p>
         </Reveal>
-        <Reveal delay={2}>
-          <Link to="/collections/all" prefetch="intent" className="btn-rude-neon mt-6">
-            {t.sections.finalCta.cta}
+        <Reveal delay={1}>
+          <Link
+            to="/collections/all"
+            prefetch="intent"
+            className="btn-rude-neon mt-10"
+          >
+            {t.finalCta.cta}
             <ArrowRight />
           </Link>
         </Reveal>
@@ -65,6 +68,7 @@ function ArrowRight() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden
+      className="rtl:rotate-180"
     >
       <path d="M1 7h15.5" />
       <path d="m11 1.5 5.5 5.5-5.5 5.5" />

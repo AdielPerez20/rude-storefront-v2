@@ -3,6 +3,9 @@ import {Reveal} from './Reveal';
 import {cn} from '~/lib/cn';
 
 /**
+ * Email capture — full-bleed park-family imagery with a centered email
+ * form. Mirrors dailyrude.com's EmailCapture treatment.
+ *
  * @param {{
  *   t: ReturnType<import('~/lib/i18n').useTranslation>,
  *   locale: 'he' | 'en',
@@ -17,75 +20,78 @@ export function Newsletter({t, locale}) {
     e.preventDefault();
     if (!email.includes('@')) return;
     setState('loading');
-    // Stubbed; wire to Klaviyo / Shopify customer create later.
     setTimeout(() => setState('done'), 700);
   }
 
   return (
-    <section className="relative overflow-hidden bg-rude-lilac py-section text-rude-ink">
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-multiply bg-noise-texture"
-        aria-hidden
+    <section className="relative isolate overflow-hidden text-rude-cream">
+      <img
+        src="/images/rude-park-family.jpg"
+        alt=""
+        className="absolute inset-0 -z-10 size-full object-cover object-top"
+        loading="lazy"
       />
       <div
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="absolute inset-0 -z-10"
         style={{
           background:
-            'radial-gradient(ellipse at 80% 20%, rgba(255,30,122,0.18) 0%, transparent 60%)',
+            'linear-gradient(to bottom, rgba(10,10,10,0.68) 0%, rgba(10,10,10,0.85) 100%)',
         }}
         aria-hidden
       />
-      <div className="container-rude">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <Reveal className="lg:col-span-7">
-            <span className="label-eyebrow">{t.sections.newsletter.eyebrow}</span>
-            <h2 className="display-text mt-4 text-display-2xl text-balance">
-              {t.sections.newsletter.title}
+
+      <div className="container-rude py-section">
+        <div className="mx-auto max-w-xl text-center">
+          <Reveal>
+            <h2 className="display-text text-display-2xl text-balance">
+              {t.email.title}
             </h2>
             <p
               className={cn(
-                'mt-6 max-w-xl text-body-lg text-rude-ink/75',
+                'mt-3 font-display text-display-lg italic text-rude-pink',
                 isHe && 'font-hebrew',
               )}
             >
-              {t.sections.newsletter.sub}
+              {t.email.sub}
             </p>
           </Reveal>
 
-          <Reveal className="lg:col-span-5 lg:self-end" delay={1}>
-            <form onSubmit={onSubmit} className="relative">
+          <Reveal delay={1}>
+            <form
+              onSubmit={onSubmit}
+              className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row"
+            >
               <label className="sr-only" htmlFor="newsletter-email">
-                {t.sections.newsletter.placeholder}
+                {t.email.placeholder}
               </label>
-              <div className="relative flex items-center rounded-pill border border-rude-ink/30 bg-rude-cream/40 backdrop-blur-md transition-colors focus-within:border-rude-ink">
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  name="email"
-                  placeholder={t.sections.newsletter.placeholder}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full bg-transparent px-6 py-4 font-sans text-body placeholder:text-rude-ink/40 focus:outline-none"
-                  disabled={state !== 'idle'}
-                />
-                <button
-                  type="submit"
-                  disabled={state !== 'idle'}
-                  className="m-1 inline-flex h-12 items-center gap-2 rounded-pill bg-rude-ink px-6 font-display text-sm uppercase tracking-[0.18em] text-rude-cream transition-all duration-500 hover:bg-rude-pink disabled:cursor-not-allowed disabled:opacity-70"
-                  style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
-                >
-                  {state === 'idle' ? t.sections.newsletter.cta : null}
-                  {state === 'loading' ? '…' : null}
-                  {state === 'done' ? '✓' : null}
-                </button>
-              </div>
-              {state === 'done' && (
-                <p className="mt-3 font-mono text-micro uppercase tracking-[0.18em] text-rude-ink">
-                  {locale === 'he' ? 'נרשמת. נסתפק בקצת.' : 'Signed up. We will be brief.'}
-                </p>
-              )}
+              <input
+                id="newsletter-email"
+                type="email"
+                name="email"
+                placeholder={t.email.placeholder}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full flex-1 rounded-pill border border-rude-cream/25 bg-rude-cream/10 px-6 py-4 font-sans text-body text-rude-cream placeholder:text-rude-cream/50 backdrop-blur-md transition-colors focus:border-rude-pink focus:outline-none"
+                disabled={state !== 'idle'}
+              />
+              <button
+                type="submit"
+                disabled={state !== 'idle'}
+                className="btn-rude-neon justify-center disabled:cursor-not-allowed disabled:opacity-70"
+              >
+                {state === 'idle' ? t.email.cta : null}
+                {state === 'loading' ? '…' : null}
+                {state === 'done' ? '✓' : null}
+              </button>
             </form>
+            <p className="mt-4 font-mono text-micro uppercase tracking-[0.18em] text-rude-cream/60">
+              {state === 'done'
+                ? locale === 'he'
+                  ? 'נרשמת. נסתפק בקצת.'
+                  : 'Signed up. We will be brief.'
+                : t.email.smallPrint}
+            </p>
           </Reveal>
         </div>
       </div>
