@@ -1,167 +1,275 @@
-import {useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {Link} from 'react-router';
 import {Reveal} from './Reveal';
 import {cn} from '~/lib/cn';
 
-const TILES = [
+/**
+ * Mock product cards. Once `loadDeferredData` returns real Shopify data,
+ * `<ProductsLineup products={...} />` will replace these with the real
+ * line-up while keeping the same card layout.
+ */
+const MOCK_PRODUCTS = [
   {
-    handle: 'electrolytes',
-    nameHe: 'אלקטרוליטים',
-    nameEn: 'Electrolytes',
-    metaHe: '20 סטיקים · 5 אלקטרוליטים',
-    metaEn: '20 sticks · 5 electrolytes',
+    handle: 'pomegranate-berry',
+    titleHe: 'רימון ופירות יער',
+    titleEn: 'Pomegranate Berry',
     image: '/images/flavor-pomegranate-texture.jpg',
-    accent: '#FF1E7A',
+    price: 159,
+    compareAt: 189,
   },
   {
-    handle: 'creatine',
-    nameHe: 'קריאטין',
-    nameEn: 'Creatine',
-    metaHe: 'מונוהידראט 100% · 30 מנות',
-    metaEn: '100% monohydrate · 30 servings',
+    handle: 'pink-lemonade',
+    titleHe: 'לימונדה ורודה',
+    titleEn: 'Pink Lemonade',
+    image: '/images/flavor-lemon-texture.jpg',
+    price: 159,
+    compareAt: null,
+  },
+  {
+    handle: 'lime-electric',
+    titleHe: 'ליים שורק',
+    titleEn: 'Electric Lime',
+    image: '/images/flavor-lime-macro.jpg',
+    price: 159,
+    compareAt: null,
+  },
+  {
+    handle: 'creatine-monohydrate',
+    titleHe: 'קריאטין מונוהידראט',
+    titleEn: 'Creatine Monohydrate',
     image: '/images/rude-creatine-tennis.jpg',
-    accent: '#1A6CC8',
-  },
-  {
-    handle: 'bundles',
-    nameHe: 'באנדלים',
-    nameEn: 'Bundles',
-    metaHe: 'חסכו עד 20%',
-    metaEn: 'Save up to 20%',
-    image: '/images/rude-hydration-summer.jpg',
-    accent: '#DBFF00',
+    price: 189,
+    compareAt: null,
   },
 ];
 
+const CURRENCY_HE = '₪';
+const CURRENCY_EN = '₪';
+
 /**
- * Compact, chip-driven product lineup. A horizontal selector chips row
- * swaps a single editorial preview tile, instead of stacking three tall
- * cards. Reads as a curated shelf rather than a catalogue dump.
+ * Products grid — white cards on cream, snap-carousel on mobile with dot
+ * indicators, 4-up grid on desktop, plus a "view all" tile. Mirrors the
+ * dailyrude.com ProductsGridSection visually.
  *
  * @param {{
  *   t: ReturnType<import('~/lib/i18n').useTranslation>,
  *   locale: 'he' | 'en',
+ *   products?: Array<{handle:string;title:string;featuredImage?:{url:string;altText?:string};priceRange?:{minVariantPrice:{amount:string;currencyCode:string}};compareAtPriceRange?:{minVariantPrice?:{amount:string;currencyCode:string}}}>,
  * }} props
  */
-export function ProductsLineup({t, locale}) {
+export function ProductsLineup({t, locale, products}) {
   const isHe = locale === 'he';
-  const [active, setActive] = useState(0);
-  const current = TILES[active];
+
+  // Map real Shopify products into the same shape as MOCK_PRODUCTS, or
+  // fall back to mock data when the storefront isn't wired yet.
+  const items = (products && products.length ? products : MOCK_PRODUCTS).slice(
+    0,
+    4,
+  );
+
+  const carouselRef = useRef(null);
+  const [activeDot, setActiveDot] = useState(0);
+  const total = items.length + 1; // +1 for "view all" tile
+
+  const onScroll = useCallback(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cardWidth = el.scrollWidth / total;
+    if (!cardWidth) return;
+    setActiveDot(
+      Math.min(total - 1, Math.max(0, Math.round(el.scrollLeft / cardWidth))),
+    );
+  }, [total]);
+
+  function scrollToCard(i) {
+    const el = carouselRef.current;
+    if (!el) return;
+    const cardWidth = el.scrollWidth / total;
+    el.scrollTo({left: cardWidth * i, behavior: 'smooth'});
+  }
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    el.addEventListener('scroll', onScroll, {passive: true});
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [onScroll]);
 
   return (
     <section className="relative bg-rude-cream py-section-sm text-rude-ink md:py-section">
       <div className="container-rude">
-        <Reveal className="flex flex-col items-start justify-between gap-3 md:flex-row md:items-end md:gap-6">
+        {/* Header row — title + tagline + "shop all" */}
+        <Reveal className="mb-8 flex items-end justify-between gap-6 md:mb-10">
           <div>
-            <span className="label-eyebrow">{t.productsLineup.eyebrow}</span>
-            <h2 className="display-text mt-2 text-display-lg text-balance md:text-display-xl">
-              {t.productsLineup.title}
+            <h2 className="display-text text-display-lg leading-none md:text-display-xl">
+              {locale === 'he' ? 'המוצרים שלנו' : 'THE COLLECTION'}
             </h2>
+            <p
+              className={cn(
+                'mt-1 text-body text-rude-ink/60',
+                isHe && 'font-hebrew',
+              )}
+            >
+              {locale === 'he'
+                ? 'ללא סוכר. רכיבים טבעיים. תוצרת ישראל.'
+                : 'No sugar. Natural ingredients. Made in Israel.'}
+            </p>
           </div>
-          <p
+          <Link
+            to="/collections/all"
+            prefetch="intent"
+            className="hidden items-center gap-2 font-mono text-micro uppercase tracking-[0.18em] text-rude-ink transition-colors hover:text-rude-pink md:inline-flex"
+          >
+            {locale === 'he' ? 'לכל המוצרים' : 'Shop all'}
+            <span className="text-base rtl:rotate-180">→</span>
+          </Link>
+        </Reveal>
+
+        {/* Card track — mobile snap-carousel, desktop grid */}
+        <div
+          ref={carouselRef}
+          className={cn(
+            '-mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth scrollbar-none px-5 md:mx-0 md:grid md:snap-none md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 lg:grid-cols-5',
+          )}
+        >
+          {items.map((item) => (
+            <ProductCard key={item.handle} item={item} locale={locale} />
+          ))}
+
+          {/* View-all tile */}
+          <Link
+            to="/collections/all"
+            prefetch="intent"
+            className="group flex w-[72vw] max-w-[260px] shrink-0 snap-start flex-col items-center justify-center rounded-rude bg-white p-6 text-center shadow-sm transition-all duration-500 hover:bg-rude-ink hover:shadow-md md:w-auto md:max-w-none md:shrink"
+            style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
+          >
+            <span className="mb-4 inline-flex size-12 items-center justify-center rounded-full bg-rude-pink text-rude-cream transition-colors duration-500 group-hover:bg-rude-cream group-hover:text-rude-ink">
+              <span className="text-xl rtl:rotate-180">→</span>
+            </span>
+            <span className="font-display text-sm uppercase tracking-[0.18em] text-rude-ink transition-colors group-hover:text-rude-cream">
+              {locale === 'he' ? 'כל המוצרים' : 'View all'}
+            </span>
+          </Link>
+        </div>
+
+        {/* Mobile dot indicators */}
+        <div className="mt-5 flex justify-center gap-2 md:hidden">
+          {Array.from({length: total}).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToCard(i)}
+              aria-label={`Go to card ${i + 1}`}
+              className={cn(
+                'h-2 rounded-full transition-all duration-300',
+                activeDot === i
+                  ? 'w-6 bg-rude-ink'
+                  : 'w-2 bg-rude-ink/25 hover:bg-rude-ink/50',
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Individual card — supports both the mock shape (numeric `price` /
+ * `compareAt`) and the live Shopify shape (`priceRange`, `featuredImage`).
+ */
+function ProductCard({item, locale}) {
+  const isHe = locale === 'he';
+  const title = isHe
+    ? (item.titleHe ?? item.title)
+    : (item.titleEn ?? item.title);
+  const handle = item.handle;
+  const imageUrl = item.image ?? item.featuredImage?.url;
+  const imageAlt = item.featuredImage?.altText ?? title;
+
+  // Pull price out of either shape
+  let price = item.price;
+  let compareAt = item.compareAt;
+  let currency = isHe ? CURRENCY_HE : CURRENCY_EN;
+  if (item.priceRange?.minVariantPrice) {
+    price = parseFloat(item.priceRange.minVariantPrice.amount);
+    currency = item.priceRange.minVariantPrice.currencyCode === 'ILS' ? '₪' : item.priceRange.minVariantPrice.currencyCode;
+  }
+  if (item.compareAtPriceRange?.minVariantPrice?.amount) {
+    const c = parseFloat(item.compareAtPriceRange.minVariantPrice.amount);
+    if (c > price) compareAt = c;
+  }
+
+  const discountPct =
+    compareAt && compareAt > price
+      ? Math.round((1 - price / compareAt) * 100)
+      : null;
+
+  return (
+    <div className="w-[72vw] max-w-[260px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+      <Link
+        to={`/products/${handle}`}
+        prefetch="intent"
+        className="group block h-full overflow-hidden rounded-rude bg-white shadow-sm transition-all duration-500 hover:shadow-md"
+        style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
+      >
+        <div className="aspect-square overflow-hidden bg-rude-cream/60">
+          {imageUrl ? (
+            <img
+              src={imageUrl}
+              alt={imageAlt}
+              loading="lazy"
+              className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+              style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
+            />
+          ) : (
+            <div className="flex size-full items-center justify-center">
+              <span className="font-display text-3xl text-rude-ink/15">
+                RUDE
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div className="p-4">
+          <h3
             className={cn(
-              'max-w-sm text-body text-rude-ink/65',
+              'mb-2 line-clamp-2 font-display text-sm uppercase leading-tight tracking-tight text-rude-ink',
               isHe && 'font-hebrew',
             )}
           >
-            {t.productsLineup.sub}
-          </p>
-        </Reveal>
+            {title}
+          </h3>
 
-        {/* Chips row — picks the active product */}
-        <Reveal delay={1} className="mt-8 flex flex-wrap gap-2">
-          {TILES.map((tile, i) => (
-            <button
-              type="button"
-              key={tile.handle}
-              onMouseEnter={() => setActive(i)}
-              onFocus={() => setActive(i)}
-              onClick={() => setActive(i)}
-              className={cn(
-                'group relative inline-flex items-center gap-2 rounded-pill border px-4 py-2 font-mono text-micro uppercase tracking-[0.16em] transition-all duration-500',
-                active === i
-                  ? 'border-rude-ink bg-rude-ink text-rude-cream'
-                  : 'border-rude-ink/15 text-rude-ink hover:border-rude-ink/40',
-              )}
-              style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
-            >
-              <span
-                className="size-2 shrink-0 rounded-full transition-transform duration-500"
-                style={{
-                  backgroundColor: tile.accent,
-                  transform: active === i ? 'scale(1.4)' : 'scale(1)',
-                }}
-                aria-hidden
-              />
-              {String(i + 1).padStart(2, '0')} · {isHe ? tile.nameHe : tile.nameEn}
-            </button>
-          ))}
-        </Reveal>
+          <div className="mb-3 flex flex-wrap items-center gap-1.5">
+            {compareAt && discountPct ? (
+              <>
+                <span className="text-xs text-rude-ink/40 line-through">
+                  {currency}
+                  {compareAt}
+                </span>
+                <span className="inline-flex items-center rounded-full bg-rude-pink px-1.5 py-0.5 text-[10px] font-black uppercase tracking-wide text-rude-cream">
+                  −{discountPct}%
+                </span>
+              </>
+            ) : null}
+            <span className="text-sm font-bold text-rude-pink">
+              {currency}
+              {price}
+            </span>
+          </div>
 
-        {/* Single editorial preview that cross-fades on selection */}
-        <Reveal delay={2} className="mt-6">
-          <Link
-            to={`/collections/${current.handle}`}
-            prefetch="intent"
+          <span
             className={cn(
-              'group relative block overflow-hidden rounded-rude transition-transform duration-700',
-              'hover:-translate-y-0.5',
+              'relative block overflow-hidden rounded-pill bg-rude-ink py-2 text-center font-mono text-[10px] uppercase tracking-[0.18em] text-rude-cream transition-all duration-500',
+              'group-hover:-translate-y-0.5 group-hover:shadow-lg group-hover:shadow-rude-ink/30',
+              "before:absolute before:inset-0 before:-translate-x-full before:skew-x-12 before:bg-rude-cream/15 before:transition-transform before:duration-700 group-hover:before:translate-x-[200%]",
             )}
             style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
           >
-            <div className="relative aspect-[5/4] sm:aspect-[16/9] md:aspect-[21/9]">
-              {TILES.map((tile, i) => (
-                <img
-                  key={tile.handle}
-                  src={tile.image}
-                  alt={isHe ? tile.nameHe : tile.nameEn}
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                  className={cn(
-                    'absolute inset-0 size-full object-cover transition-all duration-1000',
-                    active === i
-                      ? 'scale-100 opacity-100'
-                      : 'scale-[1.04] opacity-0',
-                  )}
-                  style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
-                />
-              ))}
-
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-rude-ink/75 via-rude-ink/25 to-transparent"
-                aria-hidden
-              />
-
-              {/* Foot row — name + meta + arrow */}
-              <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-rude-cream md:p-7">
-                <div className="min-w-0">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-rude-cream/70">
-                    {isHe ? current.metaHe : current.metaEn}
-                  </p>
-                  <h3
-                    className={cn(
-                      'mt-1 font-display text-2xl uppercase tracking-tight md:text-3xl',
-                      isHe && 'font-hebrew',
-                    )}
-                  >
-                    {isHe ? current.nameHe : current.nameEn}
-                  </h3>
-                </div>
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-rude-cream/40 bg-rude-cream/5 backdrop-blur-md transition-transform duration-500 group-hover:rotate-45 md:size-10">
-                  <svg width="13" height="13" viewBox="0 0 14 14" aria-hidden>
-                    <path
-                      d="M3 11L11 3M5 3h6v6"
-                      stroke="currentColor"
-                      strokeWidth="1.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-              </div>
-            </div>
-          </Link>
-        </Reveal>
-      </div>
-    </section>
+            {locale === 'he' ? 'לרכישה' : 'Shop now'}
+          </span>
+        </div>
+      </Link>
+    </div>
   );
 }
