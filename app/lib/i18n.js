@@ -18,14 +18,21 @@ const TRANSLATIONS = {
       menu: 'תפריט',
     },
     hero: {
-      eyebrow: 'אלקטרוליטים. קריאטין. אטיטיוד.',
-      titleLine1: 'אל תהיה',
-      titleLine2: 'רגיל.',
-      tagline: 'הידרציה ישראלית. מוטיבציה מלוכלכת.',
-      ctaPrimary: 'תקנו עכשיו',
-      ctaSecondary: 'ראו את הסיפור',
+      eyebrow: 'ללא סוכר · רכיבים טבעיים · תוצרת ישראל',
+      titleLine1: 'RUDE',
+      titleLine2: 'אלקטרוליטים.',
+      tagline:
+        'משקה האלקטרוליטים הראשון שבאמת תרצו לשתות. פרימיום. ללא סוכר. ללא פשרות.',
+      ctaPrimary: 'קנו עכשיו',
+      ctaSecondary: 'מידע נוסף',
     },
-    marquee: ['ללא סוכר', 'תוצרת ישראל', 'נטרליום ומגנזיום', 'משלוח חינם מ־250 ₪', 'מנוי בכל חודש'],
+    marquee: [
+      'ללא סוכר',
+      'תוצרת ישראל',
+      'נתרן · מגנזיום · אשלגן',
+      'משלוח חינם מ־250 ₪',
+      'מנוי וחיסכון',
+    ],
     sections: {
       products: {
         eyebrow: '03 / קולקציה',
@@ -89,17 +96,18 @@ const TRANSLATIONS = {
       menu: 'Menu',
     },
     hero: {
-      eyebrow: 'Electrolytes. Creatine. Attitude.',
-      titleLine1: "Don't be",
-      titleLine2: 'usual.',
-      tagline: 'Israeli hydration. Filthy motivation.',
+      eyebrow: 'No sugar · Natural ingredients · Made in Israel',
+      titleLine1: 'RUDE',
+      titleLine2: 'Electrolytes.',
+      tagline:
+        'The first electrolyte drink you actually want to drink. Premium. Zero sugar. Zero compromise.',
       ctaPrimary: 'Shop now',
-      ctaSecondary: 'Watch the story',
+      ctaSecondary: 'Learn more',
     },
     marquee: [
       'Sugar-free',
       'Made in Israel',
-      'Sodium + Magnesium',
+      'Sodium · Magnesium · Potassium',
       'Free shipping over 250₪',
       'Subscribe & save',
     ],

@@ -32,13 +32,18 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
     {to: '/pages/faq', label: t.nav.faq},
   ];
 
+  // While the hero is in view, the header sits on imagery, so it should use
+  // cream foreground tones. After scroll it sits on a solid cream surface and
+  // flips to ink foreground.
+  const fgInk = scrolled;
+
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-500',
         scrolled
-          ? 'bg-rude-cream/85 backdrop-blur-2xl backdrop-saturate-150'
-          : 'bg-transparent',
+          ? 'bg-rude-cream/90 text-rude-ink backdrop-blur-2xl backdrop-saturate-150'
+          : 'bg-gradient-to-b from-rude-ink/30 to-transparent text-rude-cream',
       )}
       style={{transitionTimingFunction: 'cubic-bezier(0.16,1,0.3,1)'}}
     >
@@ -51,7 +56,12 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
         <div className="container-rude flex items-center justify-between gap-6 py-4 md:py-5">
           <button
             type="button"
-            className="flex size-10 items-center justify-center rounded-pill text-rude-ink transition hover:bg-rude-ink/10 lg:hidden"
+            className={cn(
+              'flex size-10 items-center justify-center rounded-pill transition lg:hidden',
+              fgInk
+                ? 'text-rude-ink hover:bg-rude-ink/10'
+                : 'text-rude-cream hover:bg-rude-cream/10',
+            )}
             onClick={() => open('mobile')}
             aria-label={t.nav.menu}
           >
@@ -61,11 +71,15 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
           <Link
             to="/"
             prefetch="intent"
-            className="font-display text-2xl tracking-tight text-rude-ink hover:opacity-80 md:text-3xl"
+            className="inline-flex items-center transition hover:opacity-80"
             aria-label="RUDE — home"
           >
-            RUDE
-            <span className="ms-1 text-rude-pink">.</span>
+            <span className="font-display text-2xl tracking-tight md:text-3xl">
+              RUDE
+            </span>
+            <span className="ms-1 font-display text-2xl text-rude-pink md:text-3xl">
+              .
+            </span>
           </Link>
 
           <nav className="hidden items-center gap-8 lg:flex">
@@ -79,7 +93,9 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
                     'group relative font-mono text-micro uppercase tracking-[0.18em] transition',
                     isActive
                       ? 'text-rude-pink'
-                      : 'text-rude-ink hover:text-rude-pink',
+                      : fgInk
+                        ? 'text-rude-ink hover:text-rude-pink'
+                        : 'text-rude-cream hover:text-rude-pink',
                   )
                 }
               >
@@ -105,7 +121,12 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
             <Link
               to={isHe ? '?lang=en' : '?lang=he'}
               reloadDocument
-              className="inline-flex items-center gap-1 rounded-pill px-2.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition hover:bg-rude-ink/10 sm:px-3 sm:text-micro sm:tracking-[0.18em]"
+              className={cn(
+                'inline-flex items-center gap-1 rounded-pill px-2.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition sm:px-3 sm:text-micro sm:tracking-[0.18em]',
+                fgInk
+                  ? 'hover:bg-rude-ink/10'
+                  : 'hover:bg-rude-cream/10',
+              )}
               aria-label="Switch language"
             >
               {isHe ? 'EN' : 'עב'}
@@ -114,22 +135,32 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
             <button
               type="button"
               onClick={() => open('search')}
-              className="flex size-10 items-center justify-center rounded-pill text-rude-ink transition hover:bg-rude-ink/10"
+              className={cn(
+                'flex size-10 items-center justify-center rounded-pill transition',
+                fgInk
+                  ? 'text-rude-ink hover:bg-rude-ink/10'
+                  : 'text-rude-cream hover:bg-rude-cream/10',
+              )}
               aria-label={t.nav.search}
             >
               <SearchIcon />
             </button>
 
-            <Suspense fallback={<AccountStub label={t.nav.account} />}>
+            <Suspense fallback={<AccountStub label={t.nav.account} fgInk={fgInk} />}>
               <Await
                 resolve={isLoggedIn}
-                errorElement={<AccountStub label={t.nav.account} />}
+                errorElement={<AccountStub label={t.nav.account} fgInk={fgInk} />}
               >
                 {(loggedIn) => (
                   <Link
                     to={loggedIn ? '/account' : '/account/login'}
                     prefetch="intent"
-                    className="hidden size-10 items-center justify-center rounded-pill text-rude-ink transition hover:bg-rude-ink/10 sm:flex"
+                    className={cn(
+                      'hidden size-10 items-center justify-center rounded-pill transition sm:flex',
+                      fgInk
+                        ? 'text-rude-ink hover:bg-rude-ink/10'
+                        : 'text-rude-cream hover:bg-rude-cream/10',
+                    )}
                     aria-label={t.nav.account}
                   >
                     <AccountIcon active={loggedIn} />
@@ -141,16 +172,19 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
             <button
               type="button"
               onClick={() => open('cart')}
-              className="relative flex h-10 items-center gap-2 rounded-pill bg-rude-ink px-4 font-mono text-micro uppercase tracking-[0.18em] text-rude-cream transition-all duration-500 hover:bg-rude-pink"
+              className={cn(
+                'relative flex h-10 items-center gap-2 rounded-pill px-4 font-mono text-micro uppercase tracking-[0.18em] transition-all duration-500 hover:bg-rude-pink hover:text-rude-cream',
+                fgInk
+                  ? 'bg-rude-ink text-rude-cream'
+                  : 'bg-rude-cream text-rude-ink',
+              )}
               style={{transitionTimingFunction: 'cubic-bezier(0.16,1,0.3,1)'}}
               aria-label={t.nav.cart}
             >
               <span className="hidden sm:inline">{t.nav.cart}</span>
-              <Suspense
-                fallback={<CartCountBadge count={0} />}
-              >
-                <Await resolve={cart} errorElement={<CartCountBadge count={0} />}>
-                  {(c) => <CartCountBadge count={c?.totalQuantity ?? 0} />}
+              <Suspense fallback={<CartCountBadge count={0} fgInk={fgInk} />}>
+                <Await resolve={cart} errorElement={<CartCountBadge count={0} fgInk={fgInk} />}>
+                  {(c) => <CartCountBadge count={c?.totalQuantity ?? 0} fgInk={fgInk} />}
                 </Await>
               </Suspense>
             </button>
@@ -161,11 +195,12 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
   );
 }
 
-function CartCountBadge({count}) {
+function CartCountBadge({count, fgInk}) {
   return (
     <span
       className={cn(
-        'flex size-6 items-center justify-center rounded-full bg-rude-cream font-display text-[11px] tabular-nums text-rude-ink transition-all',
+        'flex size-6 items-center justify-center rounded-full font-display text-[11px] tabular-nums transition-all',
+        fgInk ? 'bg-rude-cream text-rude-ink' : 'bg-rude-ink text-rude-cream',
         count > 0 ? 'scale-100 opacity-100' : 'scale-90 opacity-70',
       )}
     >
@@ -174,11 +209,16 @@ function CartCountBadge({count}) {
   );
 }
 
-function AccountStub({label}) {
+function AccountStub({label, fgInk}) {
   return (
     <Link
       to="/account/login"
-      className="hidden size-10 items-center justify-center rounded-pill text-rude-ink transition hover:bg-rude-ink/10 sm:flex"
+      className={cn(
+        'hidden size-10 items-center justify-center rounded-pill transition sm:flex',
+        fgInk
+          ? 'text-rude-ink hover:bg-rude-ink/10'
+          : 'text-rude-cream hover:bg-rude-cream/10',
+      )}
       aria-label={label}
     >
       <AccountIcon />

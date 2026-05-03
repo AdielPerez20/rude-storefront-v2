@@ -31,7 +31,7 @@ export function FinalCTA({t, locale}) {
       <div className="container-rude flex flex-col items-center gap-8 text-center">
         <Reveal>
           <span className="label-eyebrow !text-rude-neon">
-            {locale === 'he' ? '08 / סוף' : '08 / END'}
+            {locale === 'he' ? 'מוכנים?' : 'Ready?'}
           </span>
         </Reveal>
         <Reveal delay={1}>

@@ -68,11 +68,11 @@ export function Manifesto({t, locale}) {
               </figure>
             </div>
 
-            {/* Quote tag */}
-            <div className="absolute -bottom-6 start-2 max-w-[14rem] rotate-[-2deg] bg-rude-neon px-4 py-3 font-display text-sm uppercase tracking-tight text-rude-ink shadow-[6px_6px_0_0] shadow-rude-ink">
+            {/* Pull quote — sits below the cluster on mobile, overlaps on lg */}
+            <div className="mt-6 max-w-[18rem] rotate-[-1.5deg] self-start bg-rude-neon px-4 py-3 font-display text-sm uppercase tracking-tight text-rude-ink shadow-[6px_6px_0_0] shadow-rude-ink lg:absolute lg:-bottom-6 lg:start-2 lg:mt-0">
               {locale === 'he'
-                ? 'הסבים שלנו. הסטנדרט שלנו.'
-                : 'Our grandparents. Our benchmark.'}
+                ? 'אנשים אמיתיים. אטיטיוד אמיתי.'
+                : 'Real people. Real attitude.'}
             </div>
           </div>
         </Reveal>

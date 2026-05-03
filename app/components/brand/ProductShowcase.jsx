@@ -54,7 +54,9 @@ const FLAVOURS = [
  */
 export function ProductShowcase({t, locale}) {
   const isHe = locale === 'he';
-  const [active, setActive] = useState(2);
+  // Default to lemon — softer transition from the cream-bg Manifesto section
+  // and reads well in both LTR and RTL.
+  const [active, setActive] = useState(0);
   const current = FLAVOURS[active];
 
   return (
@@ -204,11 +206,11 @@ export function ProductShowcase({t, locale}) {
                 </h3>
               </div>
               <Link
-                to={`/products/${current.handle}`}
+                to="/collections/all"
                 prefetch="intent"
                 className="btn-rude bg-rude-ink text-rude-cream hover:bg-rude-cream hover:text-rude-ink"
               >
-                {locale === 'he' ? 'לעמוד המוצר' : 'View product'}
+                {locale === 'he' ? 'אל החנות' : 'Shop the line'}
               </Link>
             </div>
           </div>
