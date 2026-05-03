@@ -97,9 +97,9 @@ export function ProductShowcase({t, locale}) {
           </div>
         </Reveal>
 
-        {/* Flavour selector */}
+        {/* Flavour selector — 2x2 on mobile, vertical stack on desktop */}
         <Reveal className="lg:col-span-4 lg:col-start-1" delay={1}>
-          <div className="flex flex-wrap gap-2 lg:flex-col">
+          <div className="grid grid-cols-2 gap-2 lg:grid-cols-1 lg:gap-2">
             {FLAVOURS.map((f, i) => (
               <button
                 key={f.handle}
@@ -108,21 +108,21 @@ export function ProductShowcase({t, locale}) {
                 onFocus={() => setActive(i)}
                 onClick={() => setActive(i)}
                 className={cn(
-                  'group flex w-full items-center justify-between gap-4 rounded-rude border px-5 py-4 text-left transition-all duration-500',
+                  'group flex w-full items-center justify-between gap-3 rounded-rude border px-4 py-3 text-left transition-all duration-500 lg:px-5 lg:py-4',
                   active === i
                     ? 'border-current bg-rude-ink/10'
                     : 'border-current/20 hover:border-current/60',
                 )}
                 style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
               >
-                <span className="flex items-center gap-4">
+                <span className="flex min-w-0 flex-col items-start gap-1 lg:flex-row lg:items-center lg:gap-4">
                   <span
-                    className="font-mono text-micro uppercase tracking-[0.18em]"
+                    className="font-mono text-[10px] uppercase tracking-[0.16em] lg:text-micro lg:tracking-[0.18em]"
                     style={{color: current.accent}}
                   >
                     {f.badge}
                   </span>
-                  <span className="font-display text-2xl uppercase">
+                  <span className="truncate font-display text-lg uppercase lg:text-2xl">
                     {isHe ? f.nameHe : f.nameEn}
                   </span>
                 </span>
@@ -132,7 +132,7 @@ export function ProductShowcase({t, locale}) {
                   viewBox="0 0 22 14"
                   fill="none"
                   className={cn(
-                    'transition-transform duration-500',
+                    'shrink-0 transition-transform duration-500',
                     active === i ? 'translate-x-1' : 'translate-x-0',
                     'group-hover:translate-x-1',
                   )}

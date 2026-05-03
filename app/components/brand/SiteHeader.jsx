@@ -105,7 +105,7 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
             <Link
               to={isHe ? '?lang=en' : '?lang=he'}
               reloadDocument
-              className="hidden items-center gap-1 rounded-pill px-3 py-2 font-mono text-micro uppercase tracking-[0.18em] transition hover:bg-rude-ink/10 sm:inline-flex"
+              className="inline-flex items-center gap-1 rounded-pill px-2.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition hover:bg-rude-ink/10 sm:px-3 sm:text-micro sm:tracking-[0.18em]"
               aria-label="Switch language"
             >
               {isHe ? 'EN' : 'עב'}

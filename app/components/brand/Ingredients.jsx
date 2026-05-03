@@ -80,11 +80,25 @@ export function Ingredients({t, locale}) {
           </div>
         </Reveal>
 
-        <ul className="mt-16 grid gap-px overflow-hidden rounded-rude bg-rude-cream/10 md:mt-20 md:grid-cols-5">
+        {/* Mobile: horizontal scroll-snap. Desktop: 5-up grid with hairline dividers. */}
+        <ul
+          className={cn(
+            'mt-12 flex snap-x snap-mandatory gap-3 overflow-x-auto scrollbar-none px-1 -mx-5 sm:px-0 sm:mx-0',
+            'md:mt-20 md:grid md:gap-px md:grid-cols-5 md:overflow-visible md:rounded-rude md:bg-rude-cream/10',
+          )}
+        >
           {INGREDIENTS.map((ing, i) => (
-            <Reveal key={ing.code} delay={Math.min(i, 4)} as="li">
+            <Reveal
+              key={ing.code}
+              delay={Math.min(i, 4)}
+              as="li"
+              className="w-[78%] shrink-0 snap-center first:ms-4 last:me-4 sm:w-[55%] md:w-auto md:shrink md:ms-0 md:me-0"
+            >
               <article
-                className="group relative flex h-full flex-col justify-between gap-10 bg-rude-ink p-6 transition-colors duration-500 hover:bg-rude-shadow md:p-8"
+                className={cn(
+                  'group relative flex h-full flex-col justify-between gap-10 bg-rude-ink p-6 transition-colors duration-500 hover:bg-rude-shadow md:p-8',
+                  'rounded-rude md:rounded-none',
+                )}
               >
                 <div>
                   <span className="font-mono text-micro uppercase tracking-[0.18em] text-rude-neon">

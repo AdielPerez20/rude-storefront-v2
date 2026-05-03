@@ -2,14 +2,46 @@ import {Reveal} from './Reveal';
 import {cn} from '~/lib/cn';
 
 const TILES = [
-  {src: '/images/lifestyle-surfer.jpg', alt: 'Surfer at dawn', span: 'col-span-6 row-span-2'},
-  {src: '/images/lifestyle-tlv-girl-tight.jpg', alt: 'TLV girl', span: 'col-span-3'},
-  {src: '/images/rude-padel.jpg', alt: 'Padel match', span: 'col-span-3'},
-  {src: '/images/lifestyle-beach-woman.jpg', alt: 'Beach', span: 'col-span-3'},
-  {src: '/images/rude-grandma-golf.jpg', alt: 'Grandma golfing', span: 'col-span-3'},
-  {src: '/images/rude-park-family.jpg', alt: 'Family in park', span: 'col-span-6 row-span-2'},
-  {src: '/images/rude-grandpa-kick-beach.jpg', alt: 'Grandpa kicking', span: 'col-span-3'},
-  {src: '/images/lifestyle-lemon-guy.jpg', alt: 'Lemon guy', span: 'col-span-3'},
+  {
+    src: '/images/lifestyle-surfer.jpg',
+    alt: 'Surfer at dawn',
+    span: 'col-span-12 sm:col-span-6 row-span-2 sm:row-span-2',
+  },
+  {
+    src: '/images/lifestyle-tlv-girl-tight.jpg',
+    alt: 'TLV girl',
+    span: 'col-span-6 sm:col-span-3',
+  },
+  {
+    src: '/images/rude-padel.jpg',
+    alt: 'Padel match',
+    span: 'col-span-6 sm:col-span-3',
+  },
+  {
+    src: '/images/lifestyle-beach-woman.jpg',
+    alt: 'Beach',
+    span: 'col-span-6 sm:col-span-3',
+  },
+  {
+    src: '/images/rude-grandma-golf.jpg',
+    alt: 'Grandma golfing',
+    span: 'col-span-6 sm:col-span-3',
+  },
+  {
+    src: '/images/rude-park-family.jpg',
+    alt: 'Family in park',
+    span: 'col-span-12 sm:col-span-6 row-span-2 sm:row-span-2',
+  },
+  {
+    src: '/images/rude-grandpa-kick-beach.jpg',
+    alt: 'Grandpa kicking',
+    span: 'col-span-6 sm:col-span-3',
+  },
+  {
+    src: '/images/lifestyle-lemon-guy.jpg',
+    alt: 'Lemon guy',
+    span: 'col-span-6 sm:col-span-3',
+  },
 ];
 
 /**
@@ -42,7 +74,7 @@ export function Lifestyle({t, locale}) {
           </div>
         </Reveal>
 
-        <div className="mt-12 grid auto-rows-[180px] grid-cols-12 gap-3 md:auto-rows-[260px] md:gap-4">
+        <div className="mt-12 grid auto-rows-[140px] grid-cols-12 gap-2 sm:auto-rows-[200px] sm:gap-3 md:auto-rows-[260px] md:gap-4">
           {TILES.map((tile, i) => (
             <Reveal
               key={tile.src}

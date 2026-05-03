@@ -78,10 +78,10 @@ export function Hero({t, locale}) {
         />
       </div>
 
-      {/* Top metadata strip */}
-      <div className="absolute inset-x-0 top-0 z-10 pt-24 md:pt-28">
-        <div className="container-rude flex items-center justify-between text-rude-cream/70">
-          <span className="font-mono text-micro uppercase tracking-[0.22em]">
+      {/* Top metadata strip — wraps on tiny screens */}
+      <div className="absolute inset-x-0 top-0 z-10 pt-20 md:pt-28">
+        <div className="container-rude flex flex-wrap items-center justify-between gap-2 text-rude-cream/70">
+          <span className="font-mono text-[10px] uppercase tracking-[0.18em] md:text-micro md:tracking-[0.22em]">
             {locale === 'he' ? 'פרק 01 ✦ הקסם הישראלי' : 'CHAPTER 01 ✦ THE ISRAELI EDGE'}
           </span>
           <span className="hidden font-mono text-micro uppercase tracking-[0.22em] md:inline">
@@ -91,7 +91,7 @@ export function Hero({t, locale}) {
       </div>
 
       {/* Headline */}
-      <div className="container-rude relative z-10 pb-16 md:pb-20">
+      <div className="container-rude relative z-10 pb-20 pt-4 md:pb-24">
         <p
           className={cn(
             'mb-6 font-mono text-micro uppercase tracking-[0.22em] text-rude-cream/70 transition-all duration-700',
