@@ -9,14 +9,14 @@ import {Marquee} from './Marquee';
  */
 export function MarqueeStrip({items}) {
   return (
-    <section className="relative isolate -mt-px bg-rude-ink py-8 text-rude-cream md:py-10">
+    <section className="relative isolate -mt-px bg-rude-ink py-3 text-rude-cream md:py-4">
       <Marquee
         items={items}
-        itemClassName="text-display-lg leading-none px-2 text-rude-cream"
+        itemClassName="font-display text-base leading-none px-1.5 text-rude-cream md:text-lg"
         separator={
           <span
             aria-hidden
-            className="mx-8 inline-block h-3 w-3 -translate-y-1 rotate-45 bg-rude-neon"
+            className="mx-5 inline-block h-1.5 w-1.5 rotate-45 bg-rude-pink md:mx-6"
           />
         }
       />

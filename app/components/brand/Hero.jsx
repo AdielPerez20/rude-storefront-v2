@@ -29,7 +29,7 @@ export function Hero({t, locale}) {
 
   return (
     <section
-      className="relative isolate flex flex-col overflow-hidden bg-rude-ink text-rude-cream md:min-h-[92svh] md:justify-end"
+      className="relative isolate flex flex-col overflow-hidden bg-rude-ink text-rude-cream md:min-h-[85svh] md:justify-end"
       aria-label="hero"
     >
       {/* ── Mobile: full-bleed image at natural ratio ─────────────────── */}
@@ -83,20 +83,23 @@ export function Hero({t, locale}) {
         </div>
       </div>
 
-      {/* ── Desktop: full-bleed cover image + bottom legibility wash ─── */}
+      {/* ── Desktop: full-bleed cover image + bottom legibility wash.
+          object-[center_bottom] keeps the figures + shoes anchored even on
+          ultrawide displays, where vertical cropping would otherwise eat
+          the bottom of the asset. */}
       <div className="pointer-events-none absolute inset-0 -z-10 hidden md:block">
         <img
           src="/images/landing-page-wide.jpg"
           alt=""
           className={cn(
-            'h-full w-full object-cover object-[left_top] transition-[opacity,transform] duration-1000',
+            'h-full w-full object-cover object-[center_bottom] transition-[opacity,transform] duration-1000',
             introDone ? 'opacity-100 scale-100' : 'opacity-90 scale-[1.04]',
           )}
           style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
           fetchPriority="high"
         />
         <div
-          className="absolute inset-x-0 bottom-0 h-[40%]"
+          className="absolute inset-x-0 bottom-0 h-[28%]"
           style={{
             background:
               'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.55) 100%)',

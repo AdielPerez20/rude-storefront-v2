@@ -66,14 +66,9 @@ export function FeaturedSpotlight({
             >
               {d.kicker}
             </span>
-            <h2
-              className="display-text mt-2 text-display-xl leading-[0.92]"
-              dir="ltr"
-            >
-              {d.titleA}
-            </h2>
-            <h2 className="display-text text-display-xl leading-[0.92]">
-              {d.titleB}
+            <h2 className="display-text mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-display-xl leading-[0.92]">
+              <span dir="ltr">{d.titleA}</span>
+              <span>{d.titleB}</span>
             </h2>
           </Reveal>
 

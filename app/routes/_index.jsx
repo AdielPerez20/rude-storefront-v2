@@ -73,7 +73,17 @@ export default function Homepage() {
       <MarqueeStrip items={t.marquee} />
 
       {/* 03 — Products line-up (Electrolytes / Creatine / Bundles) */}
-      <ProductsLineup t={t} locale={locale} />
+      <Suspense fallback={<ProductsLineup t={t} locale={locale} />}>
+        <Await resolve={data.recommendedProducts}>
+          {(resp) => (
+            <ProductsLineup
+              t={t}
+              locale={locale}
+              products={resp?.products?.nodes ?? null}
+            />
+          )}
+        </Await>
+      </Suspense>
 
       {/* 04 — Electrolytes spotlight */}
       <FeaturedSpotlight
@@ -131,10 +141,6 @@ export default function Homepage() {
       {/* 16 — Final CTA */}
       <FinalCTA t={t} locale={locale} />
 
-      {/* Hydration boundary for live recommended products (used later) */}
-      <Suspense fallback={null}>
-        <Await resolve={data.recommendedProducts}>{() => null}</Await>
-      </Suspense>
     </>
   );
 }
