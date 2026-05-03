@@ -24,7 +24,7 @@ export function SiteFooter({t, locale}) {
       items: [
         {label: t.nav.story, to: '/pages/story'},
         {label: locale === 'he' ? 'רכיבים' : 'Ingredients', to: '/pages/ingredients'},
-        {label: locale === 'he' ? 'גבעות מצמררות' : 'Lookbook', to: '/pages/lookbook'},
+        {label: locale === 'he' ? 'גלריה' : 'Lookbook', to: '/pages/lookbook'},
       ],
     },
     {

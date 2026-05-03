@@ -74,7 +74,14 @@
   }
 
   .btn-rude-neon {
-    @apply btn-rude bg-rude-neon text-rude-ink hover:bg-rude-ink hover:text-rude-neon;
+    /* Legacy class name kept for compatibility. The actual treatment is
+       cream → pink hover, which sits more elegantly against the imagery
+       than the high-vis lime that originally lived here. */
+    @apply btn-rude bg-rude-cream text-rude-ink hover:bg-rude-pink hover:text-rude-cream;
+  }
+
+  .btn-rude-pink {
+    @apply btn-rude bg-rude-pink text-rude-cream hover:bg-rude-ink hover:text-rude-cream;
   }
 
   .btn-rude-ghost {

@@ -55,11 +55,15 @@ export function Aside({children, heading, type}) {
         style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
       />
 
-      {/* Drawer */}
+      {/* Drawer — sits at the inline-end edge. CSS `translateX` is not
+          flipped by `dir="rtl"`, so we hide it with +100% in LTR but
+          -100% in RTL (where end-0 == left:0). */}
       <aside
         className={cn(
           'absolute end-0 top-0 flex h-full w-full max-w-[var(--aside-width)] flex-col bg-rude-cream text-rude-ink shadow-2xl transition-transform duration-500',
-          expanded ? 'translate-x-0' : 'translate-x-full',
+          expanded
+            ? 'translate-x-0'
+            : 'ltr:translate-x-full rtl:-translate-x-full',
         )}
         style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
       >

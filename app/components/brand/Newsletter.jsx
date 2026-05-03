@@ -22,9 +22,17 @@ export function Newsletter({t, locale}) {
   }
 
   return (
-    <section className="relative overflow-hidden bg-rude-neon py-section text-rude-ink">
+    <section className="relative overflow-hidden bg-rude-lilac py-section text-rude-ink">
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.06] mix-blend-multiply bg-noise-texture"
+        className="pointer-events-none absolute inset-0 opacity-[0.05] mix-blend-multiply bg-noise-texture"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            'radial-gradient(ellipse at 80% 20%, rgba(255,30,122,0.18) 0%, transparent 60%)',
+        }}
         aria-hidden
       />
       <div className="container-rude">

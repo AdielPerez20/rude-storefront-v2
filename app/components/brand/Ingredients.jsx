@@ -61,7 +61,7 @@ export function Ingredients({t, locale}) {
       <div className="container-rude relative">
         <Reveal className="grid gap-6 md:grid-cols-12 md:gap-12">
           <div className="md:col-span-7">
-            <span className="label-eyebrow !text-rude-neon">
+            <span className="label-eyebrow !text-rude-pink">
               {t.sections.ingredients.eyebrow}
             </span>
             <h2 className="display-text mt-4 text-display-xl text-balance">
@@ -101,7 +101,7 @@ export function Ingredients({t, locale}) {
                 )}
               >
                 <div>
-                  <span className="font-mono text-micro uppercase tracking-[0.18em] text-rude-neon">
+                  <span className="font-mono text-micro uppercase tracking-[0.18em] text-rude-pink">
                     {ing.dose}
                   </span>
                   <div className="mt-4 inline-flex items-center justify-center rounded-rude border border-rude-cream/20 bg-rude-cream/5 px-3 py-1 font-mono text-caption">
@@ -128,7 +128,7 @@ export function Ingredients({t, locale}) {
                 </div>
 
                 <div
-                  className="absolute -bottom-px start-0 h-0.5 w-0 bg-rude-neon transition-[width] duration-700 group-hover:w-full"
+                  className="absolute -bottom-px start-0 h-0.5 w-0 bg-rude-pink transition-[width] duration-700 group-hover:w-full"
                   style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
                   aria-hidden
                 />

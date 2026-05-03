@@ -68,8 +68,9 @@ export function Manifesto({t, locale}) {
               </figure>
             </div>
 
-            {/* Pull quote — sits below the cluster on mobile, overlaps on lg */}
-            <div className="mt-6 max-w-[18rem] rotate-[-1.5deg] self-start bg-rude-neon px-4 py-3 font-display text-sm uppercase tracking-tight text-rude-ink shadow-[6px_6px_0_0] shadow-rude-ink lg:absolute lg:-bottom-6 lg:start-2 lg:mt-0">
+            {/* Pull quote — full row below the cluster on mobile, overlaps
+                the bottom-left of the cluster from `lg` up. */}
+            <div className="col-span-6 mt-6 inline-block w-fit max-w-[18rem] rotate-[-1.5deg] bg-rude-pink px-4 py-3 font-display text-sm uppercase tracking-tight text-rude-cream shadow-[6px_6px_0_0] shadow-rude-ink lg:absolute lg:-bottom-6 lg:start-2 lg:col-span-2 lg:mt-0">
               {locale === 'he'
                 ? 'אנשים אמיתיים. אטיטיוד אמיתי.'
                 : 'Real people. Real attitude.'}

@@ -43,7 +43,7 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
         'fixed inset-x-0 top-0 z-50 transition-all duration-500',
         scrolled
           ? 'bg-rude-cream/90 text-rude-ink backdrop-blur-2xl backdrop-saturate-150'
-          : 'bg-gradient-to-b from-rude-ink/30 to-transparent text-rude-cream',
+          : 'bg-transparent text-rude-cream',
       )}
       style={{transitionTimingFunction: 'cubic-bezier(0.16,1,0.3,1)'}}
     >
@@ -71,7 +71,14 @@ export function SiteHeader({isLoggedIn, cart, t, locale}) {
           <Link
             to="/"
             prefetch="intent"
-            className="inline-flex items-center transition hover:opacity-80"
+            className={cn(
+              'inline-flex items-center transition-opacity duration-500 hover:opacity-80',
+              // The hero image already carries an enormous "RUDE" wordmark.
+              // Hide our header lockup over it; fade in once the user scrolls
+              // past the hero so the chrome doesn't double-up the brand.
+              !scrolled && 'opacity-0 pointer-events-none',
+            )}
+            style={{transitionTimingFunction: 'cubic-bezier(0.16,1,0.3,1)'}}
             aria-label="RUDE — home"
           >
             <span className="font-display text-2xl tracking-tight md:text-3xl">

@@ -3,10 +3,13 @@ import {Link} from 'react-router';
 import {cn} from '~/lib/cn';
 
 /**
- * RUDE hero — full-bleed editorial. Uses the dailyrude.com landing imagery
- * (mobile portrait + wide landscape served via <picture>), with overlay copy
- * that mirrors the live site but elevates the typography, CTAs, and bottom
- * brand-claims strip.
+ * RUDE hero. The dailyrude.com landing imagery already has "RUDE" and
+ * "Electrolytes & Creatine" baked into the JPG, so we deliberately do NOT
+ * stack a competing display headline on top of it. We let the image carry
+ * the brand identity, and add only:
+ *   - a tagline (right under the image's hard-set text, in the lower band),
+ *   - two CTAs sitting on the bottom grass band (the natural empty area),
+ *   - a thin brand-claims strip pinned to the very bottom.
  *
  * @param {{
  *   t: ReturnType<import('~/lib/i18n').useTranslation>,
@@ -15,7 +18,6 @@ import {cn} from '~/lib/cn';
  */
 export function Hero({t, locale}) {
   const isHe = locale === 'he';
-  const ref = useRef(null);
   const [introDone, setIntroDone] = useState(false);
 
   useEffect(() => {
@@ -25,11 +27,13 @@ export function Hero({t, locale}) {
 
   return (
     <section
-      ref={ref}
-      className="relative isolate flex min-h-[88svh] items-end overflow-hidden bg-rude-ink text-rude-cream md:min-h-[92svh]"
+      className="relative isolate flex min-h-[88svh] flex-col justify-end overflow-hidden bg-rude-ink text-rude-cream md:min-h-[92svh]"
       aria-label="hero"
     >
-      {/* Background imagery: mobile portrait + wide landscape via <picture> */}
+      {/* Background imagery — wide landscape on tablet+, portrait on phones.
+          object-position keeps the "RUDE" wordmark (top-left on the wide
+          asset, top-center on the mobile asset) anchored in view rather
+          than getting cropped by `object-cover`. */}
       <picture className="pointer-events-none absolute inset-0 -z-10">
         <source
           srcSet="/images/landing-page-wide.jpg"
@@ -37,88 +41,47 @@ export function Hero({t, locale}) {
         />
         <img
           src="/images/landing-page-mobile.jpg"
-          alt=""
+          alt="RUDE — electrolytes & creatine"
           className={cn(
-            'h-full w-full object-cover transition-[opacity,transform] duration-1000',
-            introDone ? 'opacity-100 scale-100' : 'opacity-80 scale-[1.04]',
+            'h-full w-full object-cover object-[center_top] transition-[opacity,transform] duration-1000 md:object-[left_top]',
+            introDone ? 'opacity-100 scale-100' : 'opacity-90 scale-[1.04]',
           )}
           style={{transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)'}}
           fetchPriority="high"
         />
       </picture>
 
-      {/* Overlay strategy: dark wash at the bottom for legibility, lighter at
-          the top so the imagery breathes. RTL/LTR safe. */}
+      {/* Bottom-only legibility wash — image breathes at the top so the
+          baked-in "RUDE" wordmark reads cleanly; copy below sits on a
+          progressively darker base. */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[50%]"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(10,10,10,0.25) 0%, rgba(10,10,10,0.05) 35%, rgba(10,10,10,0.55) 80%, rgba(10,10,10,0.85) 100%)',
+            'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.25) 45%, rgba(10,10,10,0.78) 100%)',
         }}
         aria-hidden
       />
 
-      {/* Content */}
-      <div className="container-rude relative z-10 pb-24 pt-32 md:pb-28 md:pt-36">
-        {/* Eyebrow — actual brand claims */}
+      {/* Content — sits in the lower band, on the empty grass area. */}
+      <div className="container-rude relative z-10 pb-24 md:pb-28">
         <p
           className={cn(
-            'mb-6 font-mono text-[11px] uppercase tracking-[0.18em] text-rude-cream/85 transition-all duration-700 md:text-micro md:tracking-[0.22em]',
-            introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
-          )}
-          style={{transitionDelay: '120ms'}}
-        >
-          {t.hero.eyebrow}
-        </p>
-
-        {/* Headline — clean fade-up, no per-letter animation */}
-        <h1 className="display-text leading-[0.88] text-rude-cream">
-          <span
-            className={cn(
-              'block text-display-xl transition-all duration-1000',
-              introDone ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
-            )}
-            style={{
-              transitionDelay: '200ms',
-              transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-          >
-            {t.hero.titleLine1}
-          </span>
-          <span
-            className={cn(
-              'mt-1 block text-display-2xl italic transition-all duration-1000',
-              introDone ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0',
-              'bg-gradient-to-br from-rude-cream via-rude-pink-soft to-rude-pink bg-clip-text text-transparent',
-            )}
-            style={{
-              transitionDelay: '320ms',
-              transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
-          >
-            {t.hero.titleLine2}
-          </span>
-        </h1>
-
-        {/* Tagline */}
-        <p
-          className={cn(
-            'mt-7 max-w-xl text-balance text-body-lg text-rude-cream/85 transition-all duration-700',
+            'max-w-xl text-balance text-body-lg text-rude-cream/95 transition-all duration-700',
             isHe && 'font-hebrew',
             introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
           )}
-          style={{transitionDelay: '480ms'}}
+          style={{transitionDelay: '180ms'}}
         >
           {t.hero.tagline}
         </p>
 
-        {/* CTAs */}
         <div
           className={cn(
-            'mt-10 flex flex-col items-stretch gap-3 transition-all duration-700 sm:flex-row sm:items-center sm:gap-4',
+            'mt-7 flex flex-col items-stretch gap-3 transition-all duration-700 sm:flex-row sm:items-center sm:gap-4',
             introDone ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0',
           )}
-          style={{transitionDelay: '620ms'}}
+          style={{transitionDelay: '320ms'}}
         >
           <Link
             to="/collections/all"
@@ -131,22 +94,22 @@ export function Hero({t, locale}) {
           <Link
             to="/collections"
             prefetch="intent"
-            className="btn-rude justify-center border border-rude-cream/30 bg-rude-cream/5 text-rude-cream backdrop-blur-md hover:bg-rude-cream hover:text-rude-ink"
+            className="btn-rude justify-center border border-rude-cream/40 bg-rude-cream/10 text-rude-cream backdrop-blur-md hover:bg-rude-cream hover:text-rude-ink"
           >
             {t.hero.ctaSecondary}
           </Link>
         </div>
       </div>
 
-      {/* Bottom brand claims strip — minimal, sits at the absolute bottom */}
+      {/* Brand claims strip — minimal, pinned to bottom edge */}
       <div
         className={cn(
-          'absolute inset-x-0 bottom-0 z-10 border-t border-rude-cream/15 bg-rude-ink/30 backdrop-blur-md transition-all duration-700',
+          'relative z-10 border-t border-rude-cream/15 bg-rude-ink/50 backdrop-blur-md transition-all duration-700',
           introDone ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0',
         )}
-        style={{transitionDelay: '780ms'}}
+        style={{transitionDelay: '480ms'}}
       >
-        <div className="container-rude flex items-center justify-between gap-4 py-3 text-rude-cream/80 md:py-4">
+        <div className="container-rude flex items-center justify-between gap-4 py-3 text-rude-cream/85 md:py-4">
           <BrandClaim>
             {locale === 'he' ? 'ללא סוכר' : 'No sugar'}
           </BrandClaim>
@@ -172,7 +135,7 @@ function BrandClaim({children, className}) {
         className,
       )}
     >
-      <span className="size-1.5 rounded-full bg-rude-neon" aria-hidden />
+      <span className="size-1.5 rounded-full bg-rude-pink" aria-hidden />
       {children}
     </span>
   );
